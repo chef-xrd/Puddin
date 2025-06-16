@@ -71,24 +71,23 @@ Emissions:
 ### Permissions:
 - All vaults accept **donations**
 - Only `community_vault` allows **admin withdrawals**
-- `core_vault` accepts **XRD**
-- `community_vault` accepts **Puddin**
+- `core_vault` accepts **XRD** and nothing else.
+- `community_vault` accepts **Puddin** and nothing else.
 
 ---
 
 ## 🛡 Admin Apron (Badge)
 - Non-soulbound, transferable badge
 - Grants access only to `community_vault`
-- Can be **pruned after 12 months** of inactivity
 - Used for **airdrops and community events**
 
 ---
 
 ## 🧹 Party Cleanup (Inactivity Pruning)
-- If no withdrawals from `community_vault` for **1 year**, anyone can call prune.
-- Funds are either:
+- If no withdrawals from `community_vault` occur within **1 year**, anyone can prune.
+- Pruning means funds are either:
   - **Transferred to the Fridge**
-  - Or **burned**
+  - Or **burned.**
 
 ---
 
