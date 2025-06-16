@@ -31,7 +31,7 @@ Redeem **Puddin** for XRD at rate `T / P`.
 ---
 
 ### 💸 Transfers
-All transfers incur a **0.5% fee**:
+All transfers incur a fee between **0.1%** and **1%**, to begin with, the fee is set to 0.5%, but its parameter can be changed by an off-chain community vote:
 - **50%** is **burned**
 - **50%** is split:
   - **85%** → `growth_vault` (Fridge)
