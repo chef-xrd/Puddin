@@ -33,12 +33,7 @@ This fee is a **feature**, not a penalty:
 - 🔁 It opens **arbitrage opportunities** — if Puddin trades below vault value, redemptions can balance the price for a profit.
 
 > **Note:** Users may receive a mix of LSUs from various validators depending on what is held in the vault at the time of redemption. While some LSUs may be less liquid on the open market, they are never stuck — any LSU can always be unstaked through the Radix network using the standard unbonding process (typically 7–14 days).
-
-#### 💳 Transfers (Currently Disabled)
-
-- The original model included a 0.5% fee on transfers.
-- This mechanism has been **removed** to allow for DEX compatibility and ease of use.
-
+> 
 ---
 
 ### 🧮 Portion Badges – Soul-Bound Calorie Trackers
@@ -62,10 +57,10 @@ This fee is a **feature**, not a penalty:
 
 #### Fridge (**growth_vault**) — *Optional / Disabled for Now*
 - Originally for emissions
-- Disabled until alternative funding source defined
+- Disabled until alternative funding source is defined
 
 #### Party Table (**community_vault**)
-- Admin-controlled vault for events, giveaways
+- Admin-controlled vault for events, giveaways, dev-hiring/funding.
 
 **Vault Rules**:
 - Donations accepted by Pantry (LSU) and Party Table (Puddin)
