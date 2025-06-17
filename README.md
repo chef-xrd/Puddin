@@ -1,115 +1,108 @@
-# 🍮 Puddin – Developer Spec
-
-## 🧠 Overview
-Puddin is a community-powered meme coin on **Radix Babylon** (Scrypto).  
-It blends warmth, self-control, and sharing through food metaphors.  
-Puddin utilizes a vault-backed token and soul-bound NFTs called **Portion Badges** to track burned tokens and reward NFT holders.
+# 🍮 Puddin – Developer Spec (Updated)
 
 ---
 
-## ⚙ Core Mechanics
+### 🧠 Overview
 
-### 🧹 Minting
-Users mint **Puddin** by depositing **1 XRD** into the Pantry (`core_vault`).
+Puddin is a **community-powered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. It uses food metaphors to celebrate warmth, sharing, and self-control. Puddin is minted using **LSUs (Liquid Staking Units)** and tracked via soul-bound **Portion Badges** (NFTs).
 
-Mint rate:
-- If **P = 0** or **T = 0** → mint **100 Puddin/XRD**.  
-  (P = Puddin supply, T = amount of XRD in the Pantry/Treasury)
-- Else → `P / T`.
-
-Early adopters get sweeter portions.
+Puddin grows in value naturally over time as the staking rewards accumulate in the LSU used to mint it. It's deflationary, backed by real assets, and fun.
 
 ---
 
-### ↻ Redemption
-Redeem **Puddin** for XRD at rate `T / P`.
+### ⚙️ Core Mechanics
 
-- Users receive **95%** of value.
-- Remaining **5%** is retained.
-- Redeemed Puddin is **burned** ("calories consumed").
+#### 🎶 Minting
 
----
+- Users mint Puddin by depositing **LSUs** into the Pantry (**core_vault**).
+- Mint rate is based on the **XRD value** of the LSU (queried from the LSU manager):
+  - LSU XRD value determines Puddin minted (1 LSU worth 1.08 XRD → 1.08 Puddin)
+- Vault receives the LSU, increasing the backing value of all Puddin.
 
-### 💸 Transfers
-All transfers incur a fee between **0.1%** and **1%**. However, to begin with, the fee is set to **0.5%**. This amount can change by community vote (likely to be offchain):
-- **50%** is **burned**
-- **50%** is split:
-  - **85%** → `growth_vault` (Fridge)
-  - **15%** → `community_vault` (Party Table)
+#### 🔄 Redemption
 
-**Fee exemptions:** minting, redemption, and vault I/O.
+- Users can redeem Puddin for XRD at the backing rate: **T / P** (vault / supply).
+- **2.5% fee** is applied:
+  - **1.25% stays in the core vault**, increasing the backing of all remaining Puddin
+  - **1.25% goes to the community_vault** to fund events and rewards
+- Redeemed Puddin is **burned**.
 
----
+This fee is a **feature**, not a penalty:
+- 🔥 It supports long-term deflation
+- 💰 It boosts vault value and community capacity
+- 🔁 It opens **arbitrage opportunities** — if Puddin trades below vault value, redemptions can balance the price for a profit.
 
-## 🧏‍♀️ Portion Badges – Soul-Bound Calorie Trackers
+> **Note:** Users may receive a mix of LSUs from various validators depending on what is held in the vault at the time of redemption. While some LSUs may be less liquid on the open market, they are never stuck — any LSU can always be unstaked through the Radix network using the standard unbonding process (typically 7–14 days).
 
-Minted via **burning Puddin**.
+#### 💳 Transfers (Currently Disabled)
 
-Tracks per badge:
-- `puddin_burned`
-- `last_active`
-- `emissions_claimed`
-
-Emissions:
-- Earned from the **Fridge** (`growth_vault`)
-- **Pause after 12 months** of inactivity (per NFT)
-- **Auto-burned** if unclaimed for **another 12 months**
-- **Combining badges**:
-  - Auto-claims emissions
-  - Merges stats
-  - Locks claiming for **24 hours**
+- The original model included a 0.5% fee on transfers.
+- This mechanism has been **removed** to allow for DEX compatibility and ease of use.
 
 ---
 
-## 🏦 Vault System
+### 🧮 Portion Badges – Soul-Bound Calorie Trackers
 
-### Types:
-- `core_vault` (Pantry) 🛡 – Holds XRD for redemption
-- `growth_vault` (Fridge) 🌊 – Funds emissions
-- `community_vault` (Party Table) 🎉 – Used for events
-
-### Permissions:
-- All vaults accept **donations**
-- Only `community_vault` allows **admin withdrawals**
-- `core_vault` accepts **XRD** and nothing else.
-- `community_vault` accepts **Puddin** and nothing else.
+- Minted by **burning Puddin** ("burn calories")
+- Non-transferable
+- Track:
+  - `puddin_burned`
+  - `mint_sources` (tracks LSU types used)
+  - `badge_tier`
+- **NFT Upgrades**: Burn more Puddin to level up
+- **Combining NFTs**: Merges stats, 24h lockout on new badge
 
 ---
 
-## 🛡 Admin Apron (Badge)
-- Non-soulbound, transferable badge
-- Grants access only to `community_vault`
-- Used for **airdrops and community events**
+### 🏛️ Vault System
+
+#### Pantry (**core_vault**)
+- Stores LSUs backing Puddin
+- Used for redemption payouts
+
+#### Fridge (**growth_vault**) — *Optional / Disabled for Now*
+- Originally for emissions
+- Disabled until alternative funding source defined
+
+#### Party Table (**community_vault**)
+- Admin-controlled vault for events, giveaways
+
+**Vault Rules**:
+- Donations accepted by Pantry (LSU) and Party Table (Puddin)
+- Only Party Table is withdrawable by Admin
 
 ---
 
-## 🧹 Party Cleanup (Inactivity Pruning)
-- If no withdrawals from `community_vault` occur within **1 year**, anyone can prune.
-- Pruning means funds are either:
-  - **Transferred to the Fridge**
-  - Or **burned.**
+### 🛡️ Admin Apron
+
+- Non-soulbound badge held by deployer
+- Grants access only to the **community_vault**
+- **Pruneable** after 1 year of inactivity (no withdrawal)
+- Public method triggers vault transfer to Pantry or burns the contents
 
 ---
 
-## 🖥 Frontend Requirements
+### ✔️ Scrypto Requirements
 
-Required UI Buttons:
-- **Scoop Puddin** – Mint with XRD
-- **Burn Calories** – Burn Puddin to mint/upgrade Portion Badge
-- **Claim Your Portion** – Daily claim (per badge, 24h cooldown)
-- **Combine Badges** – Merge badges with auto-claim
-
-Optional UI:
-- **Pantry View** – Vault status
-- **Badge Dashboard** – Burn/claim/emission history
+- Accept LSU via `mint_with_lsu(Bucket)`
+- Query real-time LSU:XRD value for mint calculation
+- Vault logic for redemption and burn
+- Portion Badge NFT logic:
+  - Track burn totals, source validators
+  - Upgrade and combine badges
+- Admin-only withdraw for community vault
+- Prune mechanism after 12 months of inactivity
 
 ---
 
-## ✅ Scrypto Design Requirements
+### 🖥️ Frontend Requirements
 
-- Mint, redeem, transfer with fee logic
-- Track Portion Badges, activity, emissions
-- Admin badge enforcement on `community_vault`
-- Badge upgrades and merges with auto-claim
-- Pruning and emission expiry logic
-- 24h claim cooldown per badge
+- **Scoop Puddin** (Mint with LSU)
+- **Burn Calories** (Burn Puddin → Portion Badge)
+- **Combine Badges** (Merge with auto-claim & cooldown)
+- **Pantry View** (Vault status)
+- **Badge Dashboard** (Burn history, LSU sources)
+
+---
+
+**Status**: Transfer fees removed ✨  |  LSU-based minting enabled ✨  |  Emissions paused ✨
