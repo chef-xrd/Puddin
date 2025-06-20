@@ -15,8 +15,11 @@ Puddin grows in value naturally over time as the staking rewards accumulate in t
 #### 🎶 Minting
 
 - Users mint Puddin by depositing **LSUs** from the **Puddin Validator only** into the Pantry (**core_vault**).
-- Mint rate is based on the **XRD value** of the LSU (queried from the LSU manager):
-  - LSU XRD value determines Puddin minted (1 LSU worth 1.08 XRD → 1.08 Puddin)
+- Mint price updates **instantly** after every mint, redemption, or burn:
+  - Price = Vault XRD Value ÷ Total Puddin Supply
+  - Initial price: 100 Puddin per 1 XRD (when no supply exists)
+  - Prevents sandwich attacks by updating immediately
+- **Slippage protection**: Optional max price parameter prevents failed transactions
 - Vault receives the LSU, increasing the backing value of all Puddin.
 - Contract **rejects** LSUs from other validators.
 
@@ -42,7 +45,7 @@ This fee is a **feature**, not a penalty:
 - Minted by **burning Puddin** ("burn calories" - tracked separately from redemption burns)
 - Non-transferable
 - Track:
-  - `puddin_burned`: Total Puddin burned for this badge
+  - `puddin_burned`: Total Puddin burned for this badge (includes burn bonus)
   - `mint_sources`: Tracks LSU validator (always Puddin Validator)
   - `badge_tier`: Visual representation of burn amount
   - `last_claim_epoch`: Last epoch when emissions were claimed
@@ -53,6 +56,9 @@ This fee is a **feature**, not a penalty:
   - Takes the max of `last_claim_epoch` to prevent double claiming
   - Properly calculates pending rewards before merge
   - 24h cooldown on the resulting badge
+- **Burn Bonus**: Burning 100,000+ Puddin at once adds 10% to your burn credit
+  - Example: Burn 150,000 → Badge shows 165,000 `puddin_burned`
+  - This 165,000 is used for ALL emission calculations
 
 ---
 
@@ -65,6 +71,8 @@ The Puddin Validator charges a commission fee on staking rewards. These fees are
 ```text
 epoch_rewards_per_puddin = epoch_deposits / total_puddin_burned_for_badges
 user_claimable = badge.puddin_burned * (current_rewards_per_puddin - badge.cumulative_rewards_per_puddin)
+
+Note: badge.puddin_burned includes any burn bonus earned
 ```
 
 - Tracks `cumulative_rewards_per_puddin` globally (increases each epoch)
@@ -128,16 +136,21 @@ user_claimable = badge.puddin_burned * (current_rewards_per_puddin - badge.cumul
 
 ### ✔️ Scrypto Requirements
 
-- Accept LSU via `mint_with_lsu(Bucket)` - validate it's from Puddin Validator
-- Query real-time LSU:XRD value for mint calculation
+- Accept LSU via `mint_with_lsu(Bucket, Option<Decimal>)` - validate it's from Puddin Validator
+  - Optional max price parameter for slippage protection
+- Implement instant mint pricing:
+  - Update price after every mint, redemption, or burn
+  - Initial price: 0.01 XRD per Puddin
 - Vault logic for redemption with separate burn tracking
 - Portion Badge NFT logic:
   - Track burns, epochs, accumulated rewards
   - Proper merge logic for combining badges
   - Claim calculation based on epoch system
+  - 10% burn bonus when burning 100,000+ Puddin at once
 - Global tracking:
   - `total_puddin_burned_for_badges`
   - `cumulative_rewards_per_puddin`
+  - `current_mint_price`
   - Separate tracking for redemption burns
 - Admin methods:
   - `withdraw_community_vault(amount)`
@@ -150,11 +163,11 @@ user_claimable = badge.puddin_burned * (current_rewards_per_puddin - badge.cumul
 
 ### 🖥️ Frontend Requirements
 
-- **Scoop Puddin** (Mint with LSU - shows Puddin Validator requirement)
+- **Scoop Puddin** (Mint with LSU - shows live mint price + slippage settings)
 - **Burn Calories** (Burn Puddin → Portion Badge)
 - **Combine Badges** (Shows pending rewards, handles claim during merge)
 - **Claim Fridge Share** (Shows pending emissions based on epochs)
-- **Pantry View** (Vault status, backing ratio)
+- **Pantry View** (Vault status, backing ratio, current mint price)
 - **Badge Dashboard** (Burn history, pending rewards, tier progress)
 - **Emergency Status** (Shows if paused, time until auto-unpause)
 
@@ -178,3 +191,5 @@ user_claimable = badge.puddin_burned * (current_rewards_per_puddin - badge.cumul
   - Visual flair/recognition
   - Priority access to new features
 - These would be social/community benefits rather than affecting core tokenomics
+
+**Note on Burn Bonus**: The MVP includes a 10% burn bonus when burning 100,000+ Puddin at once to incentivize larger burns and create buy pressure spikes.
