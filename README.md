@@ -6,7 +6,7 @@
 
 Puddin is a **community-centered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. This badass treat is minted using **LSUs (Liquid Staking Units)** and can be deployed on elite missions via soul-bound **Mission Badges** (NFTs).
 
-Puddin grows in value naturally over time as staking rewards accumulate in the LSU vault. It's deflationary, backed by real assets, and ready for action. Deploy your Puddin on missions to earn XRD rewards, or return them to the bakery when you need the dough.
+Puddin grows in value naturally over time as staking and protocol rewards accumulate in the LSU vault. It's deflationary, backed by real assets, and ready for action. Deploy your Puddin on missions to earn XRD rewards, or return them to the bakery when you need the dough.
 
 ---
 
