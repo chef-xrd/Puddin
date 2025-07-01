@@ -1,12 +1,12 @@
-# 🍮 Puddin – Developer Spec (Updated v2)
+# 🍮 Puddin – Developer Spec (Updated)
 
 ---
 
 ### 🧠 Overview
 
-Puddin is a **community-powered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. It uses food metaphors to celebrate warmth, sharing, and self-control. Puddin is minted using **LSUs (Liquid Staking Units)** from the official **Puddin Validator** and tracked via soul-bound **Portion Badges** (NFTs).
+Puddin is a **community-cenetered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. This badass treat is minted using **LSUs (Liquid Staking Units)** and can be deployed on elite missions via soul-bound **Mission Badges** (NFTs).
 
-Puddin grows in value naturally over time as the staking rewards accumulate in the LSU used to mint it. It's deflationary, backed by real assets, and fun.
+Puddin grows in value naturally over time as staking rewards accumulate in the LSU vault. It's deflationary, backed by real assets, and ready for action. Deploy your Puddin on missions to earn XRD rewards, or return them to the bakery when you need the dough.
 
 ---
 
@@ -14,71 +14,67 @@ Puddin grows in value naturally over time as the staking rewards accumulate in t
 
 #### 🎶 Minting
 
-- Users mint Puddin by depositing **LSUs** from the **Puddin Validator only** into the Pantry (**core_vault**).
-- Mint price updates **instantly** after every mint, redemption, or burn:
-  - Price = Vault XRD Value ÷ Total Puddin Supply
-  - Initial price: 100 Puddin per 1 XRD (when no supply exists)
-  - Prevents sandwich attacks by updating immediately
-- **Slippage protection**: Optional max price parameter prevents failed transactions
+- Users mint fresh Puddin by depositing **LSUs** into the Bakery (**core_vault**).
+- Mint rate is based on the **XRD value** of the LSU (queried from the LSU manager):
+  - LSU XRD value determines Puddin minted. To begin with the ratio is 100 Puddin for every 1 LSU.
+  - For example: 1 LSU worth 1.08 XRD → 108 Puddin.
 - Vault receives the LSU, increasing the backing value of all Puddin.
-- Contract **rejects** LSUs from other validators.
 
-#### 🔄 Redemption
+#### 🔄 Bakery Buyback Program
+*"Because sometimes you just need the dough."*
 
-- Users can redeem Puddin for LSUs at the backing rate: **T / P** (vault / supply).
+- Users can redeem Puddin for XRD at the backing rate: **T / P** (vault / supply)
 - **2.5% fee** is applied:
-  - **1.25% stays in the core vault**, increasing the backing of all remaining Puddin
-  - **1.25% goes to the community_vault** to fund events and rewards
-- Redeemed Puddin is **burned** (tracked separately from "calorie burns").
+  - **1.25% stays in the core vault**, increasing the backing of all remaining Puddin.
+  - **1.25% goes to the community_vault** to fund events and rewards.
+- Redeemed Puddin is removed from circulation.
 
 This fee is a **feature**, not a penalty:
-- 🔥 It supports long-term deflation
-- 💰 It boosts vault value and community capacity
-- 🔁 It opens **arbitrage opportunities** — if Puddin trades below vault value, redemptions can balance the price for a profit
-
-> **Note:** All redemptions return Puddin Validator LSUs. Users can unstake these through the standard Radix network unbonding process (typically 7–14 days).
+- 🔥 It supports long-term deflation.
+- 💰 It boosts vault value and community capacity.
+- 🔁 It opens **arbitrage opportunities** — if Puddin trades below vault value, redemptions can balance the price for a profit.
 
 ---
+#### 🎖️ Deploy Puddin – Mission System
 
-### 🧮 Portion Badges – Soul-Bound Calorie Trackers
+- **Deploy Puddin** by sending them on missions (creates Mission Badges).
+- Mission Badges are Non-transferable badges that track:
+  - `puddin_burned`: Total Puddin burned for this badge (includes burn bonus).
+  - `mint_sources`: Tracks LSU validator (always Puddin Validator).
+  - `badge_tier/rank`: Visual representation of burn amount.
+  - `last_claim_epoch`: Last epoch when emissions were claimed.
+  - `cumulative_rewards_per_puddin`: Accumulated rewards per Puddin at last claim.
+  - `puddin_deployed`: amount sent on missions.
+  - `badge_tier/rank`: Visual representation of burn amount.
+- **Rank Promotions**: Deploy more Puddin to increase rank.
+- **Operation Merge**: Combine squads (badges) to form larger units.
+- - **Combining NFTs**:
+  - Merges `puddin_burned` totals.
+  - Takes the max of `last_claim_epoch` to prevent double claiming.
+  - Properly calculates pending rewards before merge.
+  - 24h cooldown on the resulting badge.
+- **Burn Bonus**: Burning 100,000+ Puddin at once adds 10% to your burn credit.
+  - Example: Burn 150,000 → Badge shows 165,000 `puddin_burned`.
+  - This 165,000 is used for ALL emission calculations.
 
-- Minted by **burning Puddin** ("burn calories" - tracked separately from redemption burns)
-- Non-transferable
-- Track:
-  - `puddin_burned`: Total Puddin burned for this badge (includes burn bonus)
-  - `mint_sources`: Tracks LSU validator (always Puddin Validator)
-  - `badge_tier`: Visual representation of burn amount
-  - `last_claim_epoch`: Last epoch when emissions were claimed
-  - `cumulative_rewards_per_puddin`: Accumulated rewards per Puddin at last claim
-- **NFT Upgrades**: Burn more Puddin to level up
-- **Combining NFTs**: 
-  - Merges `puddin_burned` totals
-  - Takes the max of `last_claim_epoch` to prevent double claiming
-  - Properly calculates pending rewards before merge
-  - 24h cooldown on the resulting badge
-- **Burn Bonus**: Burning 100,000+ Puddin at once adds 10% to your burn credit
-  - Example: Burn 150,000 → Badge shows 165,000 `puddin_burned`
-  - This 165,000 is used for ALL emission calculations
+#### 💰 Mission Rewards (Fridge Intel)
+
+The Puddin Validator charges a commission fee on staking rewards. These fees are donated to the **Puddin HQ (growth_vault)** in XRD. Deployed Puddin operatives obtain a portion of this XRD reward from their missions. Meanwhile, badge holders are able to collect rewards based on the size of their deployed force and the amount of XRD currently being generated by validator comission rewards.
 
 ---
-
-### 🧊 Emissions Return System (Fridge Rewards)
-
-The Puddin Validator charges a commission fee on staking rewards. These fees are donated to the **Fridge (growth_vault)** in XRD. Portion Badge holders claim emissions based on epochs and accumulated rewards.
 
 #### 📈 Epoch-Based Distribution Formula
 
-```text
+```
 epoch_rewards_per_puddin = epoch_deposits / total_puddin_burned_for_badges
 user_claimable = badge.puddin_burned * (current_rewards_per_puddin - badge.cumulative_rewards_per_puddin)
-
 Note: badge.puddin_burned includes any burn bonus earned
 ```
 
-- Tracks `cumulative_rewards_per_puddin` globally (increases each epoch)
-- Each badge stores its `cumulative_rewards_per_puddin` at last claim
-- New deposits to Fridge increase the global rate
-- Claims update the badge's stored rate to current
+- Tracks `cumulative_rewards_per_puddin` globally (increases each epoch).
+- Each badge stores its `cumulative_rewards_per_puddin` at last claim.
+- New deposits to Fridge increase the global rate.
+- Claims update the badge's stored rate to current.
 
 #### 🔐 Implementation
 
@@ -93,39 +89,39 @@ Note: badge.puddin_burned includes any burn bonus earned
 
 ### 🏛️ Vault System
 
-#### Pantry (**core_vault**)
+#### Bakery (**core_vault**)
 - Stores LSUs backing Puddin (Puddin Validator LSUs only)
 - Used for redemption payouts
 - Accepts LSU donations
 
-#### Fridge (**growth_vault**)
+#### HQ (**growth_vault**)
 - Stores validator commission fees in XRD for Portion Badge holders
 - Funded by Puddin Validator commission donations
 - Accepts XRD donations
 
-#### Party Table (**community_vault**)
+#### The Mess Hall (**community_vault**)
 - Admin-controlled vault for events, giveaways, dev-hiring/funding
-- Stores Puddin
-- Accepts Puddin donations
+- Stores Puddin and XRD.
+- Accepts Puddin donations and XRD Donations.
 
 **Vault Rules**:
-- Donations accepted by all vaults in their respective tokens
-- Only Party Table is withdrawable by Admin
+- Donations accepted by all vaults in their respective tokens.
+- Only the Mess Hall is withdrawable by Admin.
 
 ---
 
 ### 🛡️ Admin Apron & Safety Mechanisms
 
-- Non-soulbound badge held by deployer
-- Grants access only to the **community_vault**
+- Non-soulbound badge held by deployer.
+- Grants access only to the **community_vault**.
 - **Activity Requirements**:
-  - Withdrawals from community_vault count as activity
-  - `keep_alive()` method - admin-only function to signal presence
+  - Withdrawals from community_vault count as activity.
+  - `keep_alive()` method - admin-only function to signal presence.
 - If no activity for 12 months, vault becomes **recyclable**
 - The **Recycle** public method:
-  - Transfers Party Table XRD to Fridge
-  - Burns any Puddin in Party Table
-  - Acts as failsafe if admin badge is lost
+  - Transfers **Mess Hall** XRD to HQ.
+  - Burns Puddin owned by **Mess Hall** vault.
+  - Acts as failsafe if admin badge is lost.
 
 #### 🚨 Emergency Mechanism
 - `emergency_pause()`: Admin can pause minting/redemption/claims
@@ -146,7 +142,7 @@ Note: badge.puddin_burned includes any burn bonus earned
   - Track burns, epochs, accumulated rewards
   - Proper merge logic for combining badges
   - Claim calculation based on epoch system
-  - 10% burn bonus when burning 100,000+ Puddin at once
+  - 10% burn bonus when deploying 100,000+ Puddin at once
 - Global tracking:
   - `total_puddin_burned_for_badges`
   - `cumulative_rewards_per_puddin`
@@ -163,22 +159,23 @@ Note: badge.puddin_burned includes any burn bonus earned
 
 ### 🖥️ Frontend Requirements
 
-- **Scoop Puddin** (Mint with LSU - shows live mint price + slippage settings)
-- **Burn Calories** (Burn Puddin → Portion Badge)
-- **Combine Badges** (Shows pending rewards, handles claim during merge)
-- **Claim Fridge Share** (Shows pending emissions based on epochs)
-- **Pantry View** (Vault status, backing ratio, current mint price)
-- **Badge Dashboard** (Burn history, pending rewards, tier progress)
-- **Emergency Status** (Shows if paused, time until auto-unpause)
+- **Bake Fresh Puddin** - Mint with LSU - shows live mint price + slippage settings.
+- **Deploy Puddin** - Send on missions (Burn) → Mission Badge.
+- **Collect Mission Rewards** - Claim XRD from HQ.
+- **Bakery View** - Vault status, backing ratio, current mint price.
+- **Bakery Buyback (Puddin Redemption)** - "Because sometimes you just need the dough".
+- **Badge Dashboard** - Burn history, pending rewards, tier progress.
+- **Mission Control** (Deployment stats, rank, rewards earned)
+- **Emergency Status** - Shows if paused, time until auto-unpause.
 
 ---
 
 ### 🚀 Future Considerations
 
 **Liquidity Challenge**: Initial liquidity provision requires funding. Consider:
-- Community-funded liquidity pool with LP incentives
-- Initial "Puddin Party" event where early supporters provide liquidity
-- Partnership with existing Radix DEXs
+- Community-funded liquidity pool with LP incentives.
+- Initial "Puddin Party" event where early supporters provide liquidity.
+- Partnership with existing Radix DEXs.
 
 **Batch Operations** (if needed):
 - `batch_claim(Vec<NonFungibleLocalId>)`: Claim for multiple badges in one transaction
