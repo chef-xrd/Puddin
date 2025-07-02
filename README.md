@@ -20,8 +20,8 @@ Puddin grows in value naturally over time as staking and protocol rewards accumu
   - For example: 1 LSU worth 1.08 XRD → 108 Puddin.
 - Vault receives the LSU, increasing the backing value of all Puddin.
 
-#### 🔄 Bakery Pension Program (Retires/Burns Puddin)
-*"Because sometimes you just need the dough."*
+#### 🔄 Bakery Retirement Program (Retires/Burns Puddin)
+*"Because sometimes you've done enough, and now you just need the dough."*
 
 - Users can redeem Puddin for XRD at the backing rate: **T / P** (vault / supply)
 - **2.5% fee** is applied:
