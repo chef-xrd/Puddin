@@ -4,15 +4,15 @@
 
 ### 🧠 Overview
 
-Puddin is a **community-centered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. This badass treat is minted using **LSUs (Liquid Staking Units)** and can be deployed on elite missions via soul-bound **Mission Badges** (NFTs).
+Puddin is a **community-centered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. This badass treat is minted (Enlisted) using **LSUs (Liquid Staking Units)** and can be deployed on elite missions via soul-bound **Mission Badges** (NFTs).
 
-Puddin grows in value naturally over time as staking and protocol rewards accumulate in the LSU vault. It's deflationary, backed by real assets, and ready for action. Deploy your Puddin on missions to earn XRD rewards, or return them to the bakery when you need the dough.
+Puddin grows in value naturally over time as staking and protocol rewards accumulate in the LSU vault. It's deflationary, backed by real assets, and ready for action. Deploying (burning) your Puddin sends them on missions to earn XRD rewards, alternatively, they can be returned to the bakery (Retired) when you need the dough.
 
 ---
 
 ### ⚙️ Core Mechanics
 
-#### 🎶 Minting
+#### 🎶 Minting (Enlisting)
 
 - Users mint fresh Puddin by depositing **LSUs** into the Bakery (**core_vault**).
 - Mint rate is based on the **XRD value** of the LSU (queried from the LSU manager):
@@ -20,7 +20,7 @@ Puddin grows in value naturally over time as staking and protocol rewards accumu
   - For example: 1 LSU worth 1.08 XRD → 108 Puddin.
 - Vault receives the LSU, increasing the backing value of all Puddin.
 
-#### 🔄 Bakery Buyback Program
+#### 🔄 Bakery Pension Program (Retires/Burns Puddin)
 *"Because sometimes you just need the dough."*
 
 - Users can redeem Puddin for XRD at the backing rate: **T / P** (vault / supply)
