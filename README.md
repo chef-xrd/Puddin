@@ -48,7 +48,7 @@ This fee is a **feature**, not a penalty:
   - `badge_tier/rank`: Visual representation of burn amount.
 - **Rank Promotions**: Deploy more Puddin to increase rank.
 - **Operation Merge**: Combine squads (badges) to form larger units.
-- - **Combining NFTs**:
+- - **Combining NFTs (Or upgrading an already existing nft)**:
   - Merges `puddin_burned` totals.
   - Takes the max of `last_claim_epoch` to prevent double claiming.
   - Properly calculates pending rewards before merge.
