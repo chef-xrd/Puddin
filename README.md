@@ -20,7 +20,7 @@ The Puddin token grows in value naturally over time as staking and protocol rewa
 
 #### 🎶 Minting (Naturalization)
 
-- User selects a **puddin_citizen_nft**and an amount of LSU they'd like to lock in the bakery (**redemption_vault**).
+- User selects a **puddin_citizen_nft** and an amount of LSU they'd like to lock in the bakery (**redemption_vault**) for minting purposes.
 - Mint rate is based on the **XRD value** of the LSU (queried from the LSU manager):
     - To begin with the ratio is 100 Puddin for every 1 XRD locked in the LSU.
     - For example: 1 LSU may be worth 1.08 XRD which equals 108 Puddin, but it may be that the same amount becomes worth 100 Puddin due to deflationary mechanisms.
