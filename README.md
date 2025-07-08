@@ -4,7 +4,7 @@
 
 ### 🧠 Overview
 
-Puddin is a **community-centered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. This badass treat is minted (Naturalized) using **LSUs (Liquid Staking Units)** and tracked via a unified **puddin_citizen_nft**.
+Puddin is a **community-centered, vault-backed meme coin** built on **Radix Babylon** using **Scrypto**. This badass treat is minted (Enlisted) using **LSUs (Liquid Staking Units)** and tracked via a unified **puddin_citizen_nft**.
 
 The Puddin token grows in value naturally over time as staking and protocol rewards accumulate in the LSU vault. It's deflationary, backed by real assets, and ready for action. Deploying (burning Puddin or locking Puddin, or Puddin LP) earns XRD rewards passively. Alternatively, Puddin can be returned to the bakery (Retired) when you need the dough.
 
@@ -18,7 +18,7 @@ The Puddin token grows in value naturally over time as staking and protocol rewa
      - This is to make tracking metrics easier for multiple NFTs in the same wallet.
 
 
-#### 🎶 Minting (Naturalization)
+#### 🎶 Minting (Enlistment)
 
 - User selects a **puddin_citizen_nft** and an amount of LSU they'd like to lock in the bakery (**redemption_vault**) for minting purposes.
 - Mint rate is based on the **XRD value** of the LSU (queried from the LSU manager):
